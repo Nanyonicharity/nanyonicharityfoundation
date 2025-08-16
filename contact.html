@@ -56,7 +56,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
             <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-               <img src="img/Logo 1.png" alt="Logo 1.png" style="height: 60px; margin-right: 10px;">
+                <img src="img/logo 1.png" alt="Nanyoni Charity Foundation Logo" style="height: 50px; vertical-align: middle; margin-right: 10px;">
                 <h1 class="fw-bold text-primary m-0 d-inline align-middle">Nanyoni<span class="text-white"> Charity Foundation</span></h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -66,6 +66,7 @@
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="index.html" class="nav-item nav-link">Home</a>
                     <a href="about.html" class="nav-item nav-link">About</a>
+                    
                     <div class="nav-item dropdown">
                         <div class="dropdown-menu m-0">
                             <a href="service.html" class="dropdown-item">Service</a>
@@ -76,8 +77,8 @@
                     <a href="contact.html" class="nav-item nav-link active">Contact</a>
                 </div>
                 <div class="d-none d-lg-flex ms-2">
-                    <a class="btn btn-outline-primary py-2 px-3" href="donate.html">
-                        Donate Now
+                    <a href="payout.html" class="btn btn-outline-primary py-2 px-3" href="donate.html">
+                        <span class="fw-bold">Donate Now</span>
                         <div class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
                             <i class="fa fa-arrow-right"></i>
                         </div>
@@ -136,6 +137,30 @@
                                 <div class="form-floating">
                                     <input type="email" class="form-control" id="email" placeholder="Your Email">
                                     <label for="email">Your Email</label>
+                                    <script>
+                                        // Prevent form submission if email is empty or invalid
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var form = document.querySelector('form');
+                                            var emailInput = document.getElementById('email');
+                                            var emailError = document.getElementById('emailError');
+                                            form.addEventListener('submit', function(e) {
+                                                var email = emailInput.value.trim();
+                                                var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                                                if (!email || !valid) {
+                                                    emailError.style.display = 'block';
+                                                    emailInput.focus();
+                                                    e.preventDefault();
+                                                    return false;
+                                                } else {
+                                                    emailError.style.display = 'none';
+                                                }
+                                            });
+                                            emailInput.addEventListener('input', function() {
+                                                emailError.style.display = 'none';
+                                            });
+                                        });
+                                    </script>
+                                    <div id="emailError" style="color:red; font-size:0.9em; display:none;">Please enter a valid email.</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -151,12 +176,40 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                
                                 <button class="btn btn-primary py-2 px-3 me-3" type="submit">
-                                    Send Message
+                                    <span id="sendMessageText">Send Message</span>
+                                </button>
+                                <script>
+                                document.querySelector('form').addEventListener('submit', function(e) {
+                                    var emailInput = document.getElementById('email');
+                                    var emailError = document.getElementById('emailError');
+                                    var email = emailInput.value.trim();
+                                    var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                                    if (!email || !valid) {
+                                        emailError.style.display = 'block';
+                                        emailInput.focus();
+                                        e.preventDefault();
+                                        return false;
+                                    } else {
+                                        emailError.style.display = 'none';
+                                    }
+                                    e.preventDefault();
+                                    var name = document.getElementById('name').value.trim();
+                                    var subject = document.getElementById('subject').value.trim();
+                                    var message = document.getElementById('message').value.trim();
+                                    var fullMessage = "Name: " + (name || "N/A") + "%0AEmail: " + (email || "N/A") + "%0ASubject: " + (subject || "N/A") + "%0AMessage: " + (message || "Hello, I am interested. Guide me.");
+                                    var waUrl = "https://wa.me/+256783066888?text=" + fullMessage;
+                                    window.open(waUrl, '_blank');
+                                });
+                                </script>
+                                
+                                    </script>
                                     <div class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
                                         <i class="fa fa-arrow-right"></i>
                                     </div>
                                 </button>
+        
                             </div>
                         </div>
                     </form>
@@ -204,10 +257,33 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-light mb-4">Newsletter</h5>
-                    <p>Subscribe to get the latest updates and stories from Nanyoni Charity Foundation Uganda.</p>
+                    <p>Every contribution is a seed of hope that can grow into something life-changing..</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    <input id="newsletterEmail" class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="email" placeholder="Your email" required>
+                    <button type="button" id="newsletterSignupBtn" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    <div id="newsletterEmailError" style="color:red; font-size:0.9em; display:none; margin-top:5px;">Please enter a valid email.</div>
+                    <script>
+                        document.getElementById('newsletterSignupBtn').addEventListener('click', function() {
+                            var emailInput = document.getElementById('newsletterEmail');
+                            var emailError = document.getElementById('newsletterEmailError');
+                            var email = emailInput.value.trim();
+                            var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                            if (!email || !valid) {
+                                emailError.style.display = 'block';
+                                emailInput.focus();
+                            } else {
+                                emailError.style.display = 'none';
+                                // Open Gmail compose with recipient, subject, and body
+                                var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=nanyonicharity@gmail.com&su=Volunteer&body=I would like to volunteer with Nanyoni Charity Foundation Uganda. My email: ' + encodeURIComponent(email);
+                                window.open(gmailUrl, '_blank');
+                            }
+                        });
+                        document.getElementById('newsletterEmail').addEventListener('input', function() {
+                            document.getElementById('newsletterEmailError').style.display = 'none';
+                        });
+                    </script>
+                    <!-- Removed duplicate script for newsletter signup -->
+                    </script>
                     </div>
                 </div>
             </div>
@@ -243,7 +319,4 @@
     <script src="js/main.js"></script>
 </body>
 
-
 </html>
-
-
