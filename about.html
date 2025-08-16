@@ -73,11 +73,11 @@
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
                 </div>
                 <div class="d-none d-lg-flex ms-2">
-                    <a class="btn btn-primary py-2 px-4 d-flex align-items-center fw-semibold shadow-sm" href="donate.html" style="border-radius: 30px; font-size: 1.1rem;">
-                        <span>Donate Now</span>
-                        <span class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-3" style="width: 32px; height: 32px; align-items: center; justify-content: center; display: flex;">
+                    <a href="payout.html" class="btn btn-outline-primary py-2 px-3" href="donate.html">
+                        <span class="fw-bold">Donate Now</span>
+                        <div class="d-inline-flex btn-sm-square bg-white text-primary rounded-circle ms-2">
                             <i class="fa fa-arrow-right"></i>
-                        </span>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -202,95 +202,33 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h5 class="text-light mb-4">Newsletter</h5>
-                    <p>Subscribe to get updates on our latest projects and events.</p>
+                    <p>Every contribution is a seed of hope that can grow into something life-changing..</p>
                     <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
-
-                        <!-- Sign Up Modal -->
-                        <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <form id="signupForm">
-                                  <div class="mb-3">
-                                    <label for="signupEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="signupEmail" required>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="signupPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="signupPassword" required>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control" id="signupConfirmPassword" required>
-                                  </div>
-                                  <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                                </form>
-                                <div class="text-center mt-3">
-                                  <span>Already have an account? <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signinModal">Sign In</a></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Sign In Modal -->
-                        <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="signinModalLabel">Sign In</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <form id="signinForm">
-                                  <div class="mb-3">
-                                    <label for="signinEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="signinEmail" required>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="signinPassword" class="form-label">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="signinPassword" placeholder="Enter your password" required>
-                                        <button class="btn btn-outline-secondary" type="button" id="toggleSigninPassword" tabindex="-1">
-                                            <i class="fa fa-eye" id="signinPasswordIcon"></i>
-                                        </button>
-                                    </div>
-                                    <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
-                                        const toggleBtn = document.getElementById('toggleSigninPassword');
-                                        const passwordInput = document.getElementById('signinPassword');
-                                        const icon = document.getElementById('signinPasswordIcon');
-                                        if(toggleBtn && passwordInput && icon) {
-                                            toggleBtn.addEventListener('click', function() {
-                                                if (passwordInput.type === 'password') {
-                                                    passwordInput.type = 'text';
-                                                    icon.classList.remove('fa-eye');
-                                                    icon.classList.add('fa-eye-slash');
-                                                } else {
-                                                    passwordInput.type = 'password';
-                                                    icon.classList.remove('fa-eye-slash');
-                                                    icon.classList.add('fa-eye');
-                                                }
-                                            });
-                                        }
-                                    });
-                                    </script>
-                                  </div>
-                                  <button type="submit" class="btn btn-primary w-100">Sign In</button>
-                                </form>
-                                <div class="text-center mt-3">
-                                  <span>Don't have an account? <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                    <input id="newsletterEmail" class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="email" placeholder="Your email" required>
+                    <button type="button" id="newsletterSignupBtn" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    <div id="newsletterEmailError" style="color:red; font-size:0.9em; display:none; margin-top:5px;">Please enter a valid email.</div>
+                    <script>
+                        document.getElementById('newsletterSignupBtn').addEventListener('click', function() {
+                            var emailInput = document.getElementById('newsletterEmail');
+                            var emailError = document.getElementById('newsletterEmailError');
+                            var email = emailInput.value.trim();
+                            var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                            if (!email || !valid) {
+                                emailError.style.display = 'block';
+                                emailInput.focus();
+                            } else {
+                                emailError.style.display = 'none';
+                                // Open Gmail compose with recipient, subject, and body
+                                var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=nanyonicharity@gmail.com&su=Volunteer&body=I would like to volunteer with Nanyoni Charity Foundation Uganda. My email: ' + encodeURIComponent(email);
+                                window.open(gmailUrl, '_blank');
+                            }
+                        });
+                        document.getElementById('newsletterEmail').addEventListener('input', function() {
+                            document.getElementById('newsletterEmailError').style.display = 'none';
+                        });
+                    </script>
+                    <!-- Removed duplicate script for newsletter signup -->
+                    </script>
                     </div>
                 </div>
             </div>
