@@ -54,12 +54,40 @@
         button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; margin-top: 20px; font-size: 16px; cursor: pointer;}
         button:hover { background: #0056b3; }
         .note { font-size: 13px; color: #888; margin-top: 10px; text-align: center;}
+        /* Slide-up panels */
+        .overlay {
+            position: fixed;
+            left: 0; right: 0; top: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            display: none;
+            z-index: 1200;
+        }
+        .overlay.open { display: block; }
+        .slide-panel {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            background: #fff;
+            color: #222;
+            max-width: 520px;
+            margin: 0 auto;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            box-shadow: 0 -8px 24px rgba(0,0,0,0.2);
+            transform: translateY(110%);
+            transition: transform 320ms ease;
+            z-index: 1300;
+            padding: 18px;
+        }
+        .slide-panel.open { transform: translateY(0); }
+        .slide-panel h3 { margin: 0 0 8px 0; }
+        .slide-panel .close-btn { position: absolute; right: 10px; top: 8px; background: transparent; border: none; font-size: 20px; cursor: pointer; }
+        .slide-panel .content { max-height: 58vh; overflow: auto; padding-right: 6px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 16px;">
-            <img src="img/logo 1.png" alt="image" style="height: 100px; width: 100px;">
+            <img src="logo 1.png" alt="image" style="height: 100px; width: 100px;">
         </div>
         <h2>Nanyoni charity foundation</h2>
         <form>
@@ -96,13 +124,12 @@
             </div>
 
             <label>Payment Methods</label>
-            <div style="display: flex; gap: 18px; justify-content: center; margin: 12px 0;">
-                <img src="visa.png"style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;" onclick="document.getElementById('method').value='visa'; document.getElementById('visa-fields').style.display='block'; document.getElementById('mobile-fields').style.display='none';">
-                <img src="master card.png"style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;" onclick="document.getElementById('method').value='visa'; document.getElementById('visa-fields').style.display='block'; document.getElementById('mobile-fields').style.display='none';">
-                <img src="airtel and MTN.png"style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;" onclick="document.getElementById('method').value='airtel'; document.getElementById('mobile-fields').style.display='block'; document.getElementById('visa-fields').style.display='none';">
-                <img src="MTN.png"style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;" onclick="document.getElementById('method').value='mtn'; document.getElementById('mobile-fields').style.display='block'; document.getElementById('visa-fields').style.display='none';">
-                <img src="paypal.png" alt="PayPal" title="PayPal" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;" 
-                    onclick="document.getElementById('method').value='paypal'; document.getElementById('visa-fields').style.display='none'; document.getElementById('mobile-fields').style.display='none'; document.getElementById('paypal-fields').style.display='block';">
+            <div style="display: flex; gap: 18px; justify-content: center; margin: 12px 0;" id="payment-icons">
+                <img src="visa.png" class="pay-icon" data-method="visa" alt="Visa" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;">
+                <img src="master card.png" class="pay-icon" data-method="visa" alt="MasterCard" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;">
+                <img src="airtel and MTN.png" class="pay-icon" data-method="airtel" data-panel="airtel" alt="Airtel" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;">
+                <img src="MTN.png" class="pay-icon" data-method="mtn" data-panel="mtn" alt="MTN" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;">
+                <img src="paypal.png" class="pay-icon" data-method="paypal" alt="PayPal" title="PayPal" style="width:48px; height:48px; cursor:pointer; border-radius:8px; border:2px solid #39ff14;">
             </div>
            
            
@@ -129,19 +156,112 @@
 
             <button type="submit" id="submit-payout">Submit Payout</button>
             <script>
-                document.getElementById('submit-payout').onclick = function(e) {
+                // Handle submit payout (basic behavior)
+                document.getElementById('submit-payout').addEventListener('click', function(e){
                     e.preventDefault();
                     var method = document.getElementById('method').value;
                     if (method === 'airtel') {
+                        // Airtel USSD
                         window.location.href = 'tel:*185*9%23';
+                        return;
                     }
-                };
+                    if (method === 'mtn') {
+                        // MTN USSD (example)
+                        window.location.href = 'tel:*165%23';
+                        return;
+                    }
+                    alert('Selected method: ' + (method || 'none') + '\nFor cards and PayPal please follow the on-screen instructions.');
+                });
             </script>
+            <!-- Slide panels and control script -->
+            <div id="overlay" class="overlay" aria-hidden="true"></div>
+            <div id="panel-mtn" class="slide-panel" aria-hidden="true">
+                <button class="close-btn" aria-label="Close">&times;</button>
+                <h3>Donate to Nonyoni Charity Foundation</h3>
+                <div class="content">
+                    <p>In partnership with Odongo Johnson (Merchant Code: <b>074181</b>)</p>
+                    <p>Support our mission of changing lives by donating through MTN MoMoPay.</p>
+                    <p><b>How to Donate Using MTN MoMo (155#):</b></p>
+                    <ol>
+                        <li>Dial <b>*155#</b> on your MTN line</li>
+                        <li>Select Option <b>1</b> – MoMoPay</li>
+                        <li>Enter the Merchant Code: <b>074181</b></li>
+                        <li>Enter the amount you wish to donate</li>
+                        <li>Enter Reference: <b>Nonyoni Charity</b></li>
+                        <li>Review and Confirm the details</li>
+                        <li>Enter your MoMo PIN to complete the donation</li>
+                    </ol>
+                    <p style="margin-top:10px;"><button id="mtn-call" style="background:#ffd700;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">Open USSD on phone</button></p>
+                </div>
+            </div>
+            <div id="panel-airtel" class="slide-panel" aria-hidden="true">
+                <button class="close-btn" aria-label="Close">&times;</button>
+                <h3>Donate via Airtel Money</h3>
+                <div class="content">
+                    <p>Support Nonyoni Charity Foundation via Airtel Money.</p>
+                    <p><b>How to Donate Using Airtel Money:</b></p>
+                    <ol>
+                        <li>Dial <b>*185*9#</b> on your Airtel line</li>
+                        <li>Choose the appropriate transfer or paybill option</li>
+                        <li>Enter the code: <b>6867524</b> (if required)</li>
+                        <li>Enter the amount you wish to donate</li>
+                        <li>Enter Reference: <b>Nonyoni Charity</b></li>
+                        <li>Confirm and enter your PIN to complete the payment</li>
+                    </ol>
+                    <p style="margin-top:10px;"><button id="airtel-call" style="background:#e60000;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">Open USSD on phone</button></p>
+                </div>
+            </div>
             <script>
-                document.getElementById('submit payout').onclick = function() {
-                    window.location.href = 'tel:*185*9#';
-                };
-                </script>
+                (function(){
+                    var icons = document.querySelectorAll('.pay-icon');
+                    var overlay = document.getElementById('overlay');
+                    var panelMtn = document.getElementById('panel-mtn');
+                    var panelAirtel = document.getElementById('panel-airtel');
+
+                    function closePanels(){
+                        overlay.classList.remove('open');
+                        panelMtn.classList.remove('open'); panelMtn.setAttribute('aria-hidden','true');
+                        panelAirtel.classList.remove('open'); panelAirtel.setAttribute('aria-hidden','true');
+                    }
+
+                    // click icons
+                    icons.forEach(function(img){
+                        img.addEventListener('click', function(){
+                            var method = img.dataset.method;
+                            document.getElementById('method').value = method;
+                            // show mobile or visa fields
+                            if (method === 'airtel' || method === 'mtn'){
+                                document.getElementById('mobile-fields').style.display = 'block';
+                                document.getElementById('visa-fields').style.display = 'none';
+                            } else if (method === 'visa' || method === 'paypal'){
+                                document.getElementById('visa-fields').style.display = (method === 'visa') ? 'block' : 'none';
+                                document.getElementById('mobile-fields').style.display = 'none';
+                            }
+
+                            var panel = img.dataset.panel;
+                            if (panel === 'mtn'){
+                                overlay.classList.add('open'); panelMtn.classList.add('open'); panelMtn.setAttribute('aria-hidden','false');
+                            } else if (panel === 'airtel'){
+                                overlay.classList.add('open'); panelAirtel.classList.add('open'); panelAirtel.setAttribute('aria-hidden','false');
+                            }
+                        });
+                    });
+
+                    // close handlers
+                    overlay.addEventListener('click', closePanels);
+                    panelMtn.querySelector('.close-btn').addEventListener('click', closePanels);
+                    panelAirtel.querySelector('.close-btn').addEventListener('click', closePanels);
+
+                    // USSD buttons
+                    document.getElementById('mtn-call').addEventListener('click', function(){
+                        // attempt to open USSD; note: desktop browsers may not support this
+                        window.location.href = 'tel:*155%23';
+                    });
+                    document.getElementById('airtel-call').addEventListener('click', function(){
+                        window.location.href = 'tel:*185*9%23';
+                    });
+                })();
+            </script>
         </form>
         <div class="note">All payouts are processed securely.</div>
     </div>
@@ -153,10 +273,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
-
-
