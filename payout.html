@@ -19,7 +19,7 @@
     <link rel="icon" href="img/Logo 1.png" type="image/png" sizes="48x48">
     <link rel="shortcut icon" href="img/Logo 1.png" type="image/png">
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: url('img/IMG-20250710-WA0000.jpg') center center / cover no-repeat; margin: 0; padding: 0; }
         .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 30px 25px; border-radius: 8px; box: 0 2px 8px rgba(0,0,0,0.08);}
         h2 { 
             text-align: center; 
@@ -99,11 +99,14 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    
+    <div class="container" style="background-image: url(help.jpg); background-size: cover; background-position: center; box-shadow: 0 0 20px #39ff14, 0 0 40px #00fff7;">
         <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 16px;">
             <img src="img/Logo 1.png" alt="image" style="height: 100px; width: 100px;">
+            
         </div>
-        <h2>Nanyoni charity foundation</h2>
+        <h2>NANYONI CHARITY FOUNDATION</h2>
+        <a href="index.html" style="display: block; text-align: center; margin-bottom: 18px; color: #39ff14; text-decoration: none;"> <button>Home</button></a>
         <form>
             <label for="reference">Reference</label>
             <select id="reference" name="reference" required>
@@ -208,7 +211,7 @@
                     <p style="margin-top:10px;"><button id="mtn-call" style="background:#ffd700;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;">Open USSD on phone</button></p>
                 </div>
             </div>
-            <div id="panel-airtel" class="slide-panel" aria-hidden="true">
+            <div id="panel-airtel" class="slide-panel" aria-hidden="true" style>
                 <button class="close-btn" aria-label="Close">&times;</button>
                 <h3>Donate via Airtel Money</h3>
                 <div class="content">
